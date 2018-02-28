@@ -2,21 +2,21 @@
  * This class represents a matrix.
  *
  * This class is intended to be a part of a linear algebra
- * suite with simple linear algbra tools that can be imported
+ * suite with simple linear algebra tools that can be imported
  * to help solve problems in other projects where vectors
  * and matrices might come in handy.
  *
  * Each instance of the class is intended to be final so
  * "changing" a matrix creates and returns a new instance
  * of the class rather than changing the current instances'
- * instance data.
+ * data.
  *
  * @author qld2
  *
  */
 public class Matrix {
 
-    private double[][] mat, transpose;
+    private double[][] matrix, transpose;
     private boolean isSquare;
     public final double DETERMINANT;
 
@@ -27,9 +27,9 @@ public class Matrix {
      */
     public Matrix(final double[][] m) {
 
-        this.mat = m;
+        this.matrix = m;
 
-        if(mat.length == mat[0].length) {
+        if(matrix.length == matrix[0].length) {
             isSquare = true;
         } else {
             isSquare = false;
@@ -47,11 +47,11 @@ public class Matrix {
      * @return the transpose as an array.
      */
     private double[][] generateTranspose() {
-        double[][] result = new double[mat[0].length][mat.length];
+        double[][] result = new double[matrix[0].length][matrix.length];
 
-        for (int i = 0; i < mat[0].length; i++) {
-            for (int j = 0; j < mat.length; j++) {
-                result[i][j] = mat[j][i];
+        for (int i = 0; i < matrix[0].length; i++) {
+            for (int j = 0; j < matrix.length; j++) {
+                result[i][j] = matrix[j][i];
             }
         }
 
@@ -65,10 +65,10 @@ public class Matrix {
      */
     public double[][] generateInverse() {
         if (isSquare && DETERMINANT != 0) {
-            double[][] cofactor = new double[mat.length][mat[0].length];
+            double[][] cofactor = new double[matrix.length][matrix[0].length];
 
-            for (int i = 0; i < mat.length; i++) {
-                for (int j = 0; j < mat[0].length; j++) {
+            for (int i = 0; i < matrix.length; i++) {
+                for (int j = 0; j < matrix[0].length; j++) {
                     cofactor[i][j] = getCofactorAt(i, j);
                 }
             }
@@ -76,7 +76,7 @@ public class Matrix {
             Matrix adjointMat = new Matrix(cofactor).getTranspose();
             double[][] adjoint = adjointMat.getMatrixArray();
 
-            double[][] result = new double[mat.length][mat[0].length];
+            double[][] result = new double[matrix.length][matrix[0].length];
 
             for (int i = 0; i < result.length; i++) {
                 for (int j = 0; j < result[0].length; j++) {
@@ -103,11 +103,11 @@ public class Matrix {
         }
 
         double result = 0;
-        if(mat.length == 2) {
-            result = mat[0][0]*mat[1][1] - mat[0][1]*mat[1][0];
+        if(matrix.length == 2) {
+            result = matrix[0][0]* matrix[1][1] - matrix[0][1]* matrix[1][0];
         }else{
-            for(int j = 0; j < mat[0].length; j++) {
-                result += mat[0][j]*getCofactorAt(0,j);
+            for(int j = 0; j < matrix[0].length; j++) {
+                result += matrix[0][j]*getCofactorAt(0,j);
             }
         }
         return result;
@@ -123,23 +123,23 @@ public class Matrix {
      * @return the minor for an element in the matrix.
      */
     private double minor(final int row,final int col) {
-        double[][] result = new double[mat.length - 1][mat[0].length - 1];
+        double[][] result = new double[matrix.length - 1][matrix[0].length - 1];
         int x = 0, y = 0;
 
-        for(int i = 0; i < mat.length; i++) {
+        for(int i = 0; i < matrix.length; i++) {
             if(i == row) {
                 i++;
             }
 
             y = 0;
 
-            for(int j = 0; j < mat[0].length; j++) {
+            for(int j = 0; j < matrix[0].length; j++) {
                 if(j == col) {
                     j++;
                 }
 
                 if(x < result.length && y < result[0].length) {
-                    result[x][y] = mat[i][j];
+                    result[x][y] = matrix[i][j];
                 }
 
                 y++;
@@ -180,12 +180,12 @@ public class Matrix {
 
     public Matrix multiplyBy(final Matrix m) {
         double[][] mat2 = m.getMatrixArray();
-        double[][] result = new double[mat.length][mat2[0].length];
+        double[][] result = new double[matrix.length][mat2[0].length];
 
-        for(int i = 0; i < mat.length; i++) {
+        for(int i = 0; i < matrix.length; i++) {
             for(int j = 0; j < mat2[0].length; j++) {
                 for(int k = 0; k < mat2.length; k++) {
-                    result[i][j] += mat[i][k] * mat2[k][j];
+                    result[i][j] += matrix[i][k] * mat2[k][j];
                 }
             }
         }
@@ -200,7 +200,7 @@ public class Matrix {
      * @return the matrix as an array.
      */
     public double[][] getMatrixArray() {
-        return mat;
+        return matrix;
     }
 
     /**
@@ -217,13 +217,13 @@ public class Matrix {
     public String toString() {
         String result = new String();
 
-        if(mat == null) {
+        if(matrix == null) {
             return "NULL";
         }
 
-        for(int i = 0; i < mat.length;i++) {
-            for(int j = 0; j < mat[i].length;j++) {
-                result += mat[i][j];
+        for(int i = 0; i < matrix.length; i++) {
+            for(int j = 0; j < matrix[i].length; j++) {
+                result += matrix[i][j];
                 result += "\t";
             }
             result += "\n";
