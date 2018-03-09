@@ -14,26 +14,24 @@
  * @author qld2
  *
  */
-public class Matrix {
+public class Matrix extends Vector{
 
-    private double[][] matrix, transpose;
-    private boolean isSquare;
+    private double[][] transpose;
+
+    private ColumnVector[] colVectors;
+    private RowVector[] rowVectors;
+
     public final double DETERMINANT;
 
     /**
      * Constructor.
      *
-     * @param m the matrix in the form of an array.
+     * @param mat the matrix in the form of an array.
      */
-    public Matrix(final double[][] m) {
-
-        this.matrix = m;
-
-        if(matrix.length == matrix[0].length) {
-            isSquare = true;
-        } else {
-            isSquare = false;
-        }
+    public Matrix(final double[][] mat) {
+        super(mat.length, mat[0].length);
+        
+        matrix = mat;
 
         DETERMINANT = determinant();
 
@@ -64,7 +62,7 @@ public class Matrix {
      * @return the inverse matrix as an array.
      */
     public double[][] generateInverse() {
-        if (isSquare && DETERMINANT != 0) {
+        if (m == n && DETERMINANT != 0) {
             double[][] cofactor = new double[matrix.length][matrix[0].length];
 
             for (int i = 0; i < matrix.length; i++) {
@@ -98,7 +96,7 @@ public class Matrix {
      */
     private double determinant() {
 
-        if(!isSquare) {
+        if(m != n) {
             return 0;
         }
 
@@ -122,7 +120,7 @@ public class Matrix {
      * @param col the column.
      * @return the minor for an element in the matrix.
      */
-    private double minor(final int row,final int col) {
+    private double minor(final int row, final int col) {
         double[][] result = new double[matrix.length - 1][matrix[0].length - 1];
         int x = 0, y = 0;
 
@@ -193,6 +191,9 @@ public class Matrix {
         return new Matrix(result);
     }
 
+    private void rowExchange(int rowOne, int rowTwo) {
+
+    }
 
 
     /**
