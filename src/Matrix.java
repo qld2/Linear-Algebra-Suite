@@ -12,11 +12,12 @@
  * data.
  *
  * @author qld2
- *
  */
+
 public class Matrix extends Vector{
 
-    private double[][] transpose;
+    private Matrix equivalentForm;
+    private Vector augment;
 
     private ColumnVector[] colVectors;
     private RowVector[] rowVectors;
@@ -30,30 +31,63 @@ public class Matrix extends Vector{
      */
     public Matrix(final double[][] mat) {
         super(mat.length, mat[0].length);
-        
+
         matrix = mat;
 
-        DETERMINANT = determinant();
-
-        transpose = this.generateTranspose();
-
+        DETERMINANT = 0;
     }
 
     /**
-     * Generates the transpose to the matrix.
+     * Constructor with an augment for generating inverses
+     * and solving systems.
      *
-     * @return the transpose as an array.
+     * @param mat the matrix in the form of an array.
      */
-    private double[][] generateTranspose() {
-        double[][] result = new double[matrix[0].length][matrix.length];
+    public Matrix(final double[][] mat, Vector augment) {
+        super(mat.length, mat[0].length);
+        this.augment = augment;
 
-        for (int i = 0; i < matrix[0].length; i++) {
-            for (int j = 0; j < matrix.length; j++) {
-                result[i][j] = matrix[j][i];
+        matrix = mat;
+
+        DETERMINANT = 0;
+    }
+
+    private void rref() {
+        double[] numbers = new double[(matrix.length^2 - matrix.length) / 2];
+        int counter = 0;
+
+        equivalentForm = new Matrix(getMatrixArray());
+
+        Matrix permutation = generatePermutation();
+
+        equivalentForm = permutation.multiplyBy(equivalentForm);
+
+        for (int i = 0; i < matrix.length; i++) {
+            for (int j = i; j < matrix.length; j++) {
+
+            }
+        }
+    }
+
+    public Matrix generatePermutation() {
+        double[][] id = {{1, 0, 0},{0, 1, 0},{0, 0, 1}};
+        Matrix identity = new Matrix(id);
+
+        equivalentForm = new Matrix(getMatrixArray());
+
+        for (int i = 0; i < matrix.length; i++) {
+            if (matrix[i][i] == 0) {
+                for (int j = i; j < matrix.length; j++) {
+                    if (matrix[j][i] != 0) {
+                        equivalentForm.rowExchange(i, j);
+                        identity.rowExchange(i, j);
+                        break;
+                    }
+                }
             }
         }
 
-        return result;
+        return identity;
     }
 
     /**
@@ -71,7 +105,7 @@ public class Matrix extends Vector{
                 }
             }
 
-            Matrix adjointMat = new Matrix(cofactor).getTranspose();
+            Vector adjointMat = new Matrix(cofactor).generateTranspose();
             double[][] adjoint = adjointMat.getMatrixArray();
 
             double[][] result = new double[matrix.length][matrix[0].length];
@@ -176,60 +210,22 @@ public class Matrix extends Vector{
 
     }
 
-    public Matrix multiplyBy(final Matrix m) {
-        double[][] mat2 = m.getMatrixArray();
-        double[][] result = new double[matrix.length][mat2[0].length];
+    /**
+     * From superclass. Generates the transpose.
+     *
+     * @return the transpose as a matrix.
+     */
+    public Vector generateTranspose() {
 
-        for(int i = 0; i < matrix.length; i++) {
-            for(int j = 0; j < mat2[0].length; j++) {
-                for(int k = 0; k < mat2.length; k++) {
-                    result[i][j] += matrix[i][k] * mat2[k][j];
-                }
+        double[][] result = new double[matrix[0].length][matrix.length];
+
+        for (int i = 0; i < matrix[0].length; i++) {
+            for (int j = 0; j < matrix.length; j++) {
+                result[i][j] = matrix[j][i];
             }
         }
 
         return new Matrix(result);
     }
 
-    private void rowExchange(int rowOne, int rowTwo) {
-
-    }
-
-
-    /**
-     * Gets the matrix as an array.
-     * @return the matrix as an array.
-     */
-    public double[][] getMatrixArray() {
-        return matrix;
-    }
-
-    /**
-     * Gets the transpose.
-     * @return the transpose.
-     */
-    public Matrix getTranspose() {
-        return new Matrix(transpose);
-    }
-
-    /**
-     * Allows the Matrix to print in a convienent and neat way.
-     */
-    public String toString() {
-        String result = new String();
-
-        if(matrix == null) {
-            return "NULL";
-        }
-
-        for(int i = 0; i < matrix.length; i++) {
-            for(int j = 0; j < matrix[i].length; j++) {
-                result += matrix[i][j];
-                result += "\t";
-            }
-            result += "\n";
-        }
-
-        return result;
-    }
 }

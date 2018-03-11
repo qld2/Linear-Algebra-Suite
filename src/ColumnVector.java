@@ -6,8 +6,6 @@ public class ColumnVector extends Vector {
      */
     public ColumnVector(int m) {
         super(m, 1);
-
-        matrix = new double[m][n];
     }
 
     /**
@@ -20,43 +18,30 @@ public class ColumnVector extends Vector {
     public ColumnVector(double[][] vector) {
         super(vector.length, 1);
 
-        if (vector[0].length != 1) {
-            matrix = new double[m][n];
-        } else {
+        if (vector[0].length == 1)
             matrix = vector;
-        }
     }
 
-    /**
-     * Instantiates a vector with the given components.
-     *
-     * @param vector the components in an array
-     */
-    public ColumnVector(double[] vector) {
-        super(vector.length, 1);
-
-        matrix = new double[m][n];
-
-        for (int i = 0; i < m; i++) {
-            matrix[i][1] = vector[i];
-        }
-
-    }
 
     /**
      * Instantiates a vector with the given components.
      *
      * @param components of the vector
      */
-    public ColumnVector(Double... components) {
+    public ColumnVector(double... components) {
         super(components.length, 1);
 
-        matrix = new double[m][n];
-
         for (int i = 0; i < components.length; i++) {
-            matrix[i][1] = components[i].doubleValue();
+            matrix[i][0] = components[i];
         }
     }
 
-
+    /**
+     * Generates the transpose to the vector.
+     *
+     * @return the transpose as a RowVector.
+     */
+    public Vector generateTranspose() {
+        return new RowVector(matrix.length);
+    }
 }
