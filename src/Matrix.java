@@ -52,30 +52,47 @@ public class Matrix extends Vector{
         DETERMINANT = 0;
     }
 
-    private void rref() {
-        double[] numbers = new double[(matrix.length^2 - matrix.length) / 2];
-        int counter = 0;
+    public Matrix rref() {
 
         equivalentForm = new Matrix(getMatrixArray());
-
         Matrix permutation = generatePermutation();
 
         equivalentForm = permutation.multiplyBy(equivalentForm);
 
-        for (int i = 0; i < matrix.length; i++) {
-            for (int j = i; j < matrix.length; j++) {
+        if (matrix.length == 1) {
+            equivalentForm.rowScale(0, 1/matrix[0][0]);
+        } else {
+            int counter = 0;
 
+            for (int i = 0; i < matrix.length - 1; i++) {
+                int pivotPosition = 0;
+
+                double[][] eqForm = equivalentForm.getMatrixArray();
+
+                while(eqForm[i][pivotPosition] == 0){
+                    pivotPosition++;
+                }
+
+                for (int j = i + 1; j < matrix.length; j++) {
+                    if (eqForm[j][pivotPosition] != 0) {
+                        equivalentForm.rowAdd(i, j, 1/eqForm[i][pivotPosition]);
+                    }
+                }
             }
         }
+        return equivalentForm;
     }
 
     public Matrix generatePermutation() {
-        double[][] id = {{1, 0, 0},{0, 1, 0},{0, 0, 1}};
-        Matrix identity = new Matrix(id);
+        Matrix identity = generateIdentity(matrix.length);
 
         equivalentForm = new Matrix(getMatrixArray());
 
-        for (int i = 0; i < matrix.length; i++) {
+        int shorterDim = matrix.length < matrix[0].length ? matrix.length :
+                matrix[0].length;
+
+
+        for (int i = 0; i < shorterDim; i++) {
             if (matrix[i][i] == 0) {
                 for (int j = i; j < matrix.length; j++) {
                     if (matrix[j][i] != 0) {
@@ -228,4 +245,13 @@ public class Matrix extends Vector{
         return new Matrix(result);
     }
 
+    public static Matrix generateIdentity(int size) {
+        double[][] id = new double[size][size];
+
+        for (int i = 0; i < size; i++) {
+            id[i][i] = 1;
+        }
+
+        return new Matrix(id);
+    }
 }

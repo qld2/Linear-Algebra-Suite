@@ -78,11 +78,22 @@ public abstract class Vector {
      * @param rowTwo the row to be added to
      * @param scalar multiple of rowOne to be added to rowTwo
      */
-    protected void rowAdd (int rowOne, int rowTwo, int scalar) {
+    protected void rowAdd (int rowOne, int rowTwo, double scalar) {
         for (int i = 0; i < matrix[0].length; i++) {
             matrix[rowTwo][i] *= matrix[rowOne][i];
         }
     }
+
+    /**
+     * Changes one value in a vector
+     * @param row
+     * @param column
+     * @param newValue
+     */
+    protected void changeValue(int row, int column, int newValue) {
+        matrix[row][column] = newValue;
+    }
+
 
     /**
      * Generates the transpose to the vector.
