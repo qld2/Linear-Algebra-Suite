@@ -64,11 +64,10 @@ public class Matrix extends Vector{
 
                 double[][] eqForm = equivalentForm.getMatrixArray();
                 System.out.println(equivalentForm);
+                int pivotPosition = findPivot(eqForm[i]);
 
-                int pivotPosition = 0;
-
-                while(eqForm[i][pivotPosition] == 0){
-                    pivotPosition++;
+                if (pivotPosition == -1) {
+                    break;
                 }
 
                 for (int j = i + 1; j < matrix.length; j++) {
@@ -78,9 +77,45 @@ public class Matrix extends Vector{
                 }
             }
 
+            for (int i = matrix.length - 1; i > 0; i--) {
+
+                double[][] eqForm = equivalentForm.getMatrixArray();
+                int pivotPosition = findPivot(eqForm[i]);
+
+                if (pivotPosition > 0 ) {
+                    equivalentForm.rowScale(i, 1/eqForm[i][pivotPosition]);
+                }
+            }
+
+
+            for (int i = matrix.length - 1; i > 0; i--) {
+
+                double[][] eqForm = equivalentForm.getMatrixArray();
+                int pivotPosition = findPivot(eqForm[i]);
+
+                if (pivotPosition > 0 ) {
+                    for (int j = i - 1; j >= 0; j--) {
+                        equivalentForm.rowAdd(i,j,(-1)*eqForm[j][pivotPosition]);
+                    }
+                }
+            }
 
         }
         return equivalentForm;
+    }
+
+    private int findPivot(double[] row) {
+        int pivotPosition = 0;
+
+        while(pivotPosition < row.length && row[pivotPosition] == 0){
+            pivotPosition++;
+        }
+
+        if (pivotPosition == row.length) {
+            return -1;
+        }
+
+        return pivotPosition;
     }
 
     public Matrix generatePermutation() {
