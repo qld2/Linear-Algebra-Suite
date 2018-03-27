@@ -80,7 +80,7 @@ public abstract class Vector {
      */
     protected void rowAdd (int rowOne, int rowTwo, double scalar) {
         for (int i = 0; i < matrix[0].length; i++) {
-            matrix[rowTwo][i] *= matrix[rowOne][i];
+            matrix[rowTwo][i] += scalar * matrix[rowOne][i];
         }
     }
 

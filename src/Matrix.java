@@ -16,11 +16,7 @@
 
 public class Matrix extends Vector{
 
-    private Matrix equivalentForm;
     private Vector augment;
-
-    private ColumnVector[] colVectors;
-    private RowVector[] rowVectors;
 
     public final double DETERMINANT;
 
@@ -54,7 +50,7 @@ public class Matrix extends Vector{
 
     public Matrix rref() {
 
-        equivalentForm = new Matrix(getMatrixArray());
+        Matrix equivalentForm = new Matrix(getMatrixArray());
         Matrix permutation = generatePermutation();
 
         equivalentForm = permutation.multiplyBy(equivalentForm);
@@ -65,9 +61,11 @@ public class Matrix extends Vector{
             int counter = 0;
 
             for (int i = 0; i < matrix.length - 1; i++) {
-                int pivotPosition = 0;
 
                 double[][] eqForm = equivalentForm.getMatrixArray();
+                System.out.println(equivalentForm);
+
+                int pivotPosition = 0;
 
                 while(eqForm[i][pivotPosition] == 0){
                     pivotPosition++;
@@ -75,10 +73,12 @@ public class Matrix extends Vector{
 
                 for (int j = i + 1; j < matrix.length; j++) {
                     if (eqForm[j][pivotPosition] != 0) {
-                        equivalentForm.rowAdd(i, j, 1/eqForm[i][pivotPosition]);
+                        equivalentForm.rowAdd(i, j, (-1) * eqForm[j][pivotPosition] / eqForm[i][pivotPosition]);
                     }
                 }
             }
+
+
         }
         return equivalentForm;
     }
@@ -86,7 +86,7 @@ public class Matrix extends Vector{
     public Matrix generatePermutation() {
         Matrix identity = generateIdentity(matrix.length);
 
-        equivalentForm = new Matrix(getMatrixArray());
+        Matrix equivalentForm = new Matrix(getMatrixArray());
 
         int shorterDim = matrix.length < matrix[0].length ? matrix.length :
                 matrix[0].length;
