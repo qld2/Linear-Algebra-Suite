@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 /**
  * This class represents a matrix.
  *
@@ -15,8 +17,6 @@
  */
 
 public class Matrix extends Vector{
-
-    private Vector augment;
 
     public final double DETERMINANT;
 
@@ -41,14 +41,14 @@ public class Matrix extends Vector{
      */
     public Matrix(final double[][] mat, Vector augment) {
         super(mat.length, mat[0].length);
-        this.augment = augment;
+        //this.augment = augment;
 
         matrix = mat;
 
         DETERMINANT = 0;
     }
 
-    public Matrix rref() {
+    public Matrix rref (Vector augment) {
 
         Matrix equivalentForm = new Matrix(getMatrixArray());
         Matrix permutation = generatePermutation();
@@ -120,26 +120,73 @@ public class Matrix extends Vector{
 
     public Matrix generatePermutation() {
         Matrix identity = generateIdentity(matrix.length);
-
         Matrix equivalentForm = new Matrix(getMatrixArray());
+        double[][] eqForm = equivalentForm.getMatrixArray();
 
         int shorterDim = matrix.length < matrix[0].length ? matrix.length :
                 matrix[0].length;
 
+        ArrayList[] posPivots = new ArrayList[shorterDim];
 
-        for (int i = 0; i < shorterDim; i++) {
-            if (matrix[i][i] == 0) {
-                for (int j = i; j < matrix.length; j++) {
-                    if (matrix[j][i] != 0) {
-                        equivalentForm.rowExchange(i, j);
-                        identity.rowExchange(i, j);
-                        break;
-                    }
-                }
-            }
-        }
 
         return identity;
+    }
+
+    private double[] getRowOrder(ArrayList<Double>[] posPivots) {
+
+        int branch = -1;
+
+            for (int i = 0; i < posPivots.length; i++) {
+
+                if (posPivots[i].size() == 0) {
+                    double[] rowOrder = new double[i];
+
+                    for (int j = 0; j < i; j++) {
+                        rowOrder[j] = posPivots[j].get(0);
+                    }
+
+                    return rowOrder;
+                }
+
+                if (posPivots[i].size() > 1) {
+                    branch = i;
+                    break;
+                }
+            }
+
+            if (branch == -1) {
+                double[] rowOrder = new double[posPivots.length];
+
+                for (int j = 0; j < posPivots.length; j++) {
+                    rowOrder[j] = posPivots[j].get(0);
+                }
+
+            return rowOrder;
+        }
+
+        double[] largest = new double[0];
+
+        for (int i = 0; i < posPivots[branch].size(); i++) {
+
+            ArrayList[] pp = new ArrayList[posPivots.length];
+
+            for (int j = 0; j < branch; j++) {
+                pp[j] =
+            }
+
+            for (int j = branch; j < posPivots.length; j++) {
+
+            }
+
+            double[] rowOrder = getRowOrder(pp);
+
+            if (rowOrder.length > largest.length) {
+                largest = rowOrder;
+            }
+
+            return largest;
+        }
+
     }
 
     /**

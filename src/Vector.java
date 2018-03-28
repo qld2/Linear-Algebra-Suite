@@ -94,6 +94,14 @@ public abstract class Vector {
         matrix[row][column] = newValue;
     }
 
+    /**
+     * Changes one value in a vector
+     * @param row
+     * @param column
+     */
+    protected double getValue(int row, int column) {
+        return matrix[row][column];
+    }
 
     /**
      * Generates the transpose to the vector.
